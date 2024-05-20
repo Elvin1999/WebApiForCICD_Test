@@ -27,10 +27,15 @@ namespace WebApiForCICD.Controllers
 
         // GET api/<ProductController>/5
         [HttpGet("{id}")]
-        public Product Get(int id)
+        public ActionResult<Product> Get(int id)
         {
             var product = _productService.GetProductById(id);
-            return product;
+            if (product == null)
+            {
+                return NotFound();
+            }
+            //return Ok(product);
+            return NotFound();
         }
 
         // POST api/<ProductController>
