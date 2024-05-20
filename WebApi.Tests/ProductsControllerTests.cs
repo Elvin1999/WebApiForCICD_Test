@@ -44,6 +44,7 @@ namespace WebApi.Tests
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
 
             var createdProduct = await response.Content.ReadFromJsonAsync<Product>();
+            Console.WriteLine("Added with this ID " + createdProduct.Id);
             Assert.IsNotNull(createdProduct);
             Assert.AreEqual("Test Product", createdProduct.Name);
         }
