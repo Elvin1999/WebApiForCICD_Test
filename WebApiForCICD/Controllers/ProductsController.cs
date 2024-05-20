@@ -19,10 +19,10 @@ namespace WebApiForCICD.Controllers
 
         // GET: api/<ProductController>
         [HttpGet]
-        public IEnumerable<Product> Get()
+        public ActionResult<IEnumerable<Product>> Get()
         {
             var products = _productService.GetProducts();
-            return products;
+            return Ok(products);
         }
 
         // GET api/<ProductController>/5
@@ -35,10 +35,12 @@ namespace WebApiForCICD.Controllers
 
         // POST api/<ProductController>
         [HttpPost]
-        public Product Post([FromBody] Product product)
+        public ActionResult<Product> Post([FromBody] Product product)
         {
+            var products = _productService.GetProducts();
+            product.Id = products.Count > 0 ? products.Max(p => p.Id) + 1 : 1;
             _productService.Add(product);
-            return product;
+            return CreatedAtAction(nameof(Get), new { id = product.Id }, product);
         }
 
         // PUT api/<ProductController>/5

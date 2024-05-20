@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using NUnit.Framework;
 using System.Net;
+using System.Net.Http.Json;
 using WebApiForCICD;
+using WebApiForCICD.Entities;
 
 namespace WebApi.Tests
 {
@@ -30,7 +32,21 @@ namespace WebApi.Tests
         {
             var response = await _client.GetAsync("/api/products");
             response.EnsureSuccessStatusCode();
-            Assert.Equals(HttpStatusCode.OK, response.StatusCode);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
+
+        [Test]
+        public async Task CreateProduct_ReturnsCreatedResponse()
+        {
+            var product = new Product { Name = "Test Product", Price = 9.99 };
+            var response = await _client.PostAsJsonAsync("/api/products", product);
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+
+            var createdProduct = await response.Content.ReadFromJsonAsync<Product>();
+            Assert.IsNotNull(createdProduct);
+            Assert.AreEqual("Test Product", createdProduct.Name);
+        }
+
     }
 }
