@@ -34,8 +34,7 @@ namespace WebApiForCICD.Controllers
             {
                 return NotFound();
             }
-            //return Ok(product);
-            return NotFound();
+            return Ok(product);
         }
 
         // POST api/<ProductController>
